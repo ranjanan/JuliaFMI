@@ -21,10 +21,10 @@ function createEmptyModelData(modelDescription::ModelDescription)
 
     for var in modelDescription.modelVariables
         if typeof(var.typeSpecificProperties)==RealProperties
-            if var.typeSpecificProperties.derivative > 0
+            #=if var.typeSpecificProperties.derivative > 0
                 modelData.numberOfStates += 1
                 modelData.numberOfDerivatives += 1
-            end
+            end=#
             modelData.numberOfReals += 1
         elseif typeof(var.typeSpecificProperties)==IntegerProperties
             modelData.numberOfInts += 1
@@ -39,6 +39,8 @@ function createEmptyModelData(modelDescription::ModelDescription)
         end
 
     modelData.numberOfEventIndicators = modelDescription.numberOfEventIndicators
+    modelData.numberOfStates = length(modelDescription.derivatives)
+    modelData.numberOfDerivatives = length(modelDescription.derivatives)
     end
 
     return modelData
@@ -296,6 +298,7 @@ function getContinuousStates!(fmu::FMU)
     for i=1:fmu.modelData.numberOfStates
         fmu.simulationData.modelVariables.reals[i].value = states[i]
     end
+    states
 end
 
 
@@ -311,6 +314,7 @@ function getDerivatives!(fmu::FMU)
     for i=1:fmu.modelData.numberOfDerivatives
         fmu.simulationData.modelVariables.reals[i+fmu.modelData.numberOfStates].value = derivatives[i]
     end
+    derivatives
 end
 
 

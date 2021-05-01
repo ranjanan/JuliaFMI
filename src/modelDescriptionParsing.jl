@@ -200,9 +200,11 @@ function getModelVariables(xroot::XMLElement)
     for element in get_elements_by_tagname(elementModelVariables, "ScalarVariable")
         numberOfVariables += 1
     end
-    scalarVariables = Array{ScalarVariable}(undef, numberOfVariables)
+    iterlist = get_elements_by_tagname(elementModelVariables, "ScalarVariable")
 
-    for (index, element) in enumerate(get_elements_by_tagname(elementModelVariables, "ScalarVariable"))
+    scalarVariables = Array{ScalarVariable}(undef, length(iterlist))
+
+    for (index, element) in enumerate(iterlist)
         # Get attributes name, valueReference, variability, causality, initial
         tmp_name = attribute(element, "name"; required=true)
         tmp_valueReference = parse(Int, attribute(element, "valueReference"; required=true))
@@ -413,7 +415,11 @@ function readModelDescription(pathToModelDescription::String)
         md.modelVariables = getModelVariables(xroot)
 
         # Get attributes of tag ModelStructure
+        
+        # Get derivatives
+        idx = parse.(Int, attribute.(get_elements_by_tagname(find_element(find_element(xroot, "ModelStructure"), "Derivatives"), "Unknown"), "index"))
 
+        md.derivatives = md.modelVariables[idx]
 
     catch err
         if isa(err, KeyError)

@@ -5,6 +5,7 @@
 
 
 using CBinding
+using CBinding: @cenum
 
 """
 Declaration of FMI2 Types

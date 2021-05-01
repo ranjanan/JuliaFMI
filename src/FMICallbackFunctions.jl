@@ -58,7 +58,9 @@ end
 # Macro to identify logger library
 macro libLogger()
     if Sys.iswindows()
-        return joinpath(dirname(dirname(Base.source_path())),"bin", "win64", "logger.dll")
+        str = joinpath(dirname(dirname(Base.pathof(JuliaFMI))),"bin", "win64", "logger.dll")
+        @show dirname(dirname(Base.pathof(JuliaFMI)))
+        return str
     elseif Sys.islinux()
         return joinpath(dirname(dirname(Base.source_path())),"bin", "unix64", "logger.so")
     elseif Sys.isapple()

@@ -499,6 +499,8 @@ mutable struct ModelDescription
     # Model variables
     modelVariables::Array{ScalarVariable,1}
 
+    derivatives::Array{ScalarVariable, 1}
+
     # Model structure
     modelStructure
 
